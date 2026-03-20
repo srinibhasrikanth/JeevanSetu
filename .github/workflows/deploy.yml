@@ -27,19 +27,21 @@ jobs:
           workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
           service_account: 'my-service-account@your-gcp-project-id.iam.gserviceaccount.com'
 
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
       - name: Deploy Backend to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: jeevansetu-backend
-          region: ${{ env.REGION }}
-          source: ./backend
-          env_vars: |
-            NODE_ENV=production
+        working-directory: ./backend
+        run: |
+          gcloud run deploy jeevansetu-backend \
+            --source . \
+            --region ${{ env.REGION }} \
+            --set-env-vars NODE_ENV=production
 
       - name: Deploy Frontend to Cloud Run
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-          service: jeevansetu-frontend
-          region: ${{ env.REGION }}
-          source: ./frontend
-          flags: '--allow-unauthenticated'
+        working-directory: ./frontend
+        run: |
+          gcloud run deploy jeevansetu-frontend \
+            --source . \
+            --region ${{ env.REGION }} \
+            --allow-unauthenticated
