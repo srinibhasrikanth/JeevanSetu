@@ -8,7 +8,7 @@ const sampleRoutes = require('./routes/sampleRoutes');
 dotenv.config();
 
 // Connect to database
-connectDB();
+// connectDB();
 
 const app = express();
 
