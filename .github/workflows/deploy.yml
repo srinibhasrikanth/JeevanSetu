@@ -6,8 +6,8 @@ on:
       - main
 
 env:
-  PROJECT_ID: your-gcp-project-id
-  REGION: us-central1
+  PROJECT_ID: jeevansetu-490807
+  REGION: europe-west1
 
 jobs:
   deploy:
@@ -36,6 +36,7 @@ jobs:
           gcloud run deploy jeevansetu-backend \
             --source . \
             --region ${{ env.REGION }} \
+            --allow-unauthenticated \
             --set-env-vars NODE_ENV=production
 
       - name: Deploy Frontend to Cloud Run
@@ -44,4 +45,5 @@ jobs:
           gcloud run deploy jeevansetu-frontend \
             --source . \
             --region ${{ env.REGION }} \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --set-build-env-vars "VITE_API_BASE_URL=https://jeevansetu-backend-842227041877.europe-west1.run.app"
